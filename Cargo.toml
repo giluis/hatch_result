@@ -5,7 +5,7 @@ edition = "2021"
 license = "MIT"
 description = "A result-like struct that returns on Ok, instead of on Err when ? operator is used"
 readme = "README.md"
-keywords = ["result", "ok-early", "from_residual", "question-mark-operator"]
+keywords = ["result", "ok-early", "from_residual", "question-mark"]
 categories = ["rust-patterns"]
 
 
