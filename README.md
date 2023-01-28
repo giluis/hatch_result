@@ -1,18 +1,37 @@
 # Hatch Result
 A wrapper on a result that returns on Ok instead of Err when ? operator is used
+this allows to exit a function with an Ok result if a computation has succeeded, or handle the error inside the function if it has failed;
 Hatch comes from escape hatch, in the sense that the Ok result escapes early
 It's tough to come up with good names for things and I'll take suggestions, just open an issue!
 
 The tests are located in lib.rs
 
 ## Examples
+    Difference between regular result and HatchResult
 ```rust
-fn disjunct_function() -> HatchResult<u32,String> {
-    HatchResult(Result::<u32, String>::Ok())
+fn regular_result() -> Result<u32, String> {
+    let value = Ok(4)?;
+    Ok(value)
 }
 
-fn test() -> u32{
-    let err = disjunct_function()?
-    panic!("There was an error: {err}");
+fn hatch_result() -> Result<u32,String> {
+    let err = HatchResult(Ok(3))?;
+    Err(err)
+}   
+```
+
+Exiting early from a function after success of a fallible function.
+If the function succeeds, an Ok Result is returned.
+If it fails, the expression evaluates to the error value.
+
+```rust
+fn operation_that_might_fail() -> HatchResult<u32,String> {
+    let result = // ...
+    HatchResult(result)
 }
+
+fn hatch_result() -> Result<u32,String> {
+    let error = operation_that_might_fail()?;
+    panic!("There was an error: {error}");
+}   
 ```
