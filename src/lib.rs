@@ -44,6 +44,16 @@ impl<T, E> HatchResult<T, E> {
     }
 }
 
+trait EscapeHatch<T,E> {
+    fn hatch(self) -> HatchResult<T,E>;
+}
+
+impl <T,E> EscapeHatch<T,E> for Result<T,E> {
+    fn hatch(self) -> HatchResult<T,E> {
+        HatchResult(self)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::HatchResult;
