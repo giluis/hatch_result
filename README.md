@@ -1,6 +1,6 @@
 # Hatch Result
 
-A wrapper on a result that returns on `Ok` instead of `Err` when `?` operator is used.  
+A wrapper on `std::result::Result` that returns on `Ok` instead of `Err` when `?` operator is used.  
 This allows to exit a function with an `Ok` result if a computation has succeeded, or handle the error inside the function if it has failed
 
 Regular `Result`'s `?` mimcs the [shortcircuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation) on a logical **and**: if one operation returns an error, immedtiatly return from the function. If not, proceed to the next statements.  
@@ -8,11 +8,6 @@ Regular `Result`'s `?` mimcs the [shortcircuiting](https://en.wikipedia.org/wiki
 `HatchResult`'s `?` mimics the shortcircuiting on a logical **or**: if one operation returns an Ok, immediately return from the function. If not, proceed to the next statements.  
 
 This crate also implements a `hatch` method on regular `Result` that returns self inside of a `HatchResult` wrapper.  
-
-"Hatch" comes from escape hatch, in the sense that the Ok result escapes early  
-It's tough to come up with good names for things and I'll take suggestions, just open an issue!  
-
-The tests are located in lib.rs  
 
 ## Examples
 
