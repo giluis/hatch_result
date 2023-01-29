@@ -1,6 +1,6 @@
 [package]
 name = "hatch_result"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 license = "MIT"
 description = "A result-like struct that returns on Ok, instead of on Err when ? operator is used"
@@ -8,7 +8,7 @@ readme = "README.md"
 keywords = ["result", "ok-early", "from_residual", "question-mark","return_early"]
 authors =["Luís Gil"]
 categories = ["rust-patterns"]
-repository = ""
+repository = "https://github.com/giluis/hatch_result"
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
