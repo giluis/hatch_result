@@ -2,54 +2,54 @@
 
 use std::ops::{FromResidual, Try};
 
-pub struct DisjunctResultWrapper<T, E>(pub Result<T, E>);
+pub struct HatchResult<T, E>(pub Result<T, E>);
 
-impl<T, E> FromResidual<DisjunctResultWrapper<T, E>> for DisjunctResultWrapper<T, E> {
-    fn from_residual(residual: DisjunctResultWrapper<T, E>) -> Self {
+impl<T, E> FromResidual<HatchResult<T, E>> for HatchResult<T, E> {
+    fn from_residual(residual: HatchResult<T, E>) -> Self {
         residual
     }
 }
 
-impl<T, E> FromResidual<DisjunctResultWrapper<T, E>> for Result<T, E> {
-    fn from_residual(residual: DisjunctResultWrapper<T, E>) -> Self {
+impl<T, E> FromResidual<HatchResult<T, E>> for Result<T, E> {
+    fn from_residual(residual: HatchResult<T, E>) -> Self {
         match residual {
-            DisjunctResultWrapper(Ok(r)) => Ok(r),
+            HatchResult(Ok(r)) => Ok(r),
             _ => unreachable!("E cannot be instantiated"),
         }
     }
 }
 
-impl<T, E> Try for DisjunctResultWrapper<T, E> {
+impl<T, E> Try for HatchResult<T, E> {
     type Output = E;
-    type Residual = DisjunctResultWrapper<T, E>;
+    type Residual = HatchResult<T, E>;
 
     fn from_output(output: Self::Output) -> Self {
-        DisjunctResultWrapper(Err(output))
+        HatchResult(Err(output))
     }
 
     fn branch(self) -> std::ops::ControlFlow<Self::Residual, Self::Output> {
         match self.0 {
-            Ok(value) => std::ops::ControlFlow::Break(DisjunctResultWrapper(Ok(value))),
+            Ok(value) => std::ops::ControlFlow::Break(HatchResult(Ok(value))),
             Err(err_msg) => std::ops::ControlFlow::Continue(err_msg),
         }
     }
 }
 
-impl<T, E> DisjunctResultWrapper<T, E> {
-    pub fn map<P>(self, construction_function: fn(T) -> P) -> DisjunctResultWrapper<P, E> {
+impl<T, E> HatchResult<T, E> {
+    pub fn map<P>(self, construction_function: fn(T) -> P) -> HatchResult<P, E> {
         match self.0 {
-            Ok(result) => DisjunctResultWrapper(Ok(construction_function(result))),
-            Err(err) => DisjunctResultWrapper::<P, E>(Err(err)),
+            Ok(result) => HatchResult(Ok(construction_function(result))),
+            Err(err) => HatchResult::<P, E>(Err(err)),
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::DisjunctResultWrapper;
+    use super::HatchResult;
 
     fn dummy_fn<T, E: Default>(r: Result<T, E>) -> Result<T, E> {
-        let err = DisjunctResultWrapper(r)?;
+        let err = HatchResult(r)?;
         Err(err)
     }
 
