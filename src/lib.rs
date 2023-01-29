@@ -45,12 +45,12 @@ impl<T, E> HatchResult<T, E> {
     }
 }
 
-pub trait EscapeHatch<T,E> {
-    fn hatch(self) -> HatchResult<T,E>;
+pub trait EscapeHatch<T, E> {
+    fn hatch(self) -> HatchResult<T, E>;
 }
 
-impl <T,E> EscapeHatch<T,E> for Result<T,E> {
-    fn hatch(self) -> HatchResult<T,E> {
+impl<T, E> EscapeHatch<T, E> for Result<T, E> {
+    fn hatch(self) -> HatchResult<T, E> {
         HatchResult(self)
     }
 }
@@ -70,7 +70,7 @@ mod tests {
     fn hatch_implementation() {
         let r1 = HatchResult::<u32, String>(Ok(3));
         let r2 = Result::<u32, String>::Ok(3).hatch();
-        assert_eq!(r1,r2);
+        assert_eq!(r1, r2);
     }
 
     #[test]
