@@ -2,6 +2,7 @@
 
 use std::ops::{FromResidual, Try};
 
+#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct HatchResult<T, E>(pub Result<T, E>);
 
 impl<T, E> FromResidual<HatchResult<T, E>> for HatchResult<T, E> {
