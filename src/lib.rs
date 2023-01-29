@@ -3,6 +3,7 @@
 use std::ops::{FromResidual, Try};
 
 #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+/// The main HatchResult type. See crate level documentation for more information.
 pub struct HatchResult<T, E>(pub Result<T, E>);
 
 impl<T, E> FromResidual<HatchResult<T, E>> for HatchResult<T, E> {
@@ -45,19 +46,20 @@ impl<T, E> HatchResult<T, E> {
     }
 }
 
-pub trait EscapeHatch<T,E> {
-    fn hatch(self) -> HatchResult<T,E>;
+/// An extension trait for adding the `hatch` method to the builtin [Result] type.
+pub trait ResultHatchExt<T, E> {
+    fn hatch(self) -> HatchResult<T, E>;
 }
-
-impl <T,E> EscapeHatch<T,E> for Result<T,E> {
-    fn hatch(self) -> HatchResult<T,E> {
+/// The implementation which adds the `hatch` method to the builtin [Result] type using the [ResultHatchExt] extension trait
+impl<T, E> ResultHatchExt<T, E> for Result<T, E> {
+    fn hatch(self) -> HatchResult<T, E> {
         HatchResult(self)
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::EscapeHatch;
+    use crate::ResultHatchExt;
 
     use super::HatchResult;
 
@@ -70,7 +72,7 @@ mod tests {
     fn hatch_implementation() {
         let r1 = HatchResult::<u32, String>(Ok(3));
         let r2 = Result::<u32, String>::Ok(3).hatch();
-        assert_eq!(r1,r2);
+        assert_eq!(r1, r2);
     }
 
     #[test]
