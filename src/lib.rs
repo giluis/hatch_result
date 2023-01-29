@@ -57,6 +57,8 @@ impl <T,E> EscapeHatch<T,E> for Result<T,E> {
 
 #[cfg(test)]
 mod tests {
+    use crate::EscapeHatch;
+
     use super::HatchResult;
 
     fn dummy_fn<T, E: Default>(r: Result<T, E>) -> Result<T, E> {
@@ -65,7 +67,14 @@ mod tests {
     }
 
     #[test]
-    fn test_it_breaks_when_inner_result_is_ok() {
+    fn hatch_implementation() {
+        let r1 = HatchResult::<u32, String>(Ok(3));
+        let r2 = Result::<u32, String>::Ok(3).hatch();
+        assert_eq!(r1,r2);
+    }
+
+    #[test]
+    fn escapes_when_inner_result_is_ok() {
         let input = Result::<u32, String>::Ok(3);
         let result = dummy_fn(input.clone());
         assert!(input == result);
