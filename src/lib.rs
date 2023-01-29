@@ -3,6 +3,7 @@
 use std::ops::{FromResidual, Try};
 
 #[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
+/// The main HatchResult type. See crate level documentation for more information.
 pub struct HatchResult<T, E>(pub Result<T, E>);
 
 impl<T, E> FromResidual<HatchResult<T, E>> for HatchResult<T, E> {
@@ -45,11 +46,12 @@ impl<T, E> HatchResult<T, E> {
     }
 }
 
-pub trait EscapeHatch<T, E> {
+/// An extension trait for adding the `hatch` method to the builtin [Result] type.
+pub trait ResultHatchExt<T, E> {
     fn hatch(self) -> HatchResult<T, E>;
 }
-
-impl<T, E> EscapeHatch<T, E> for Result<T, E> {
+/// The implementation which adds the `hatch` method to the builtin [Result] type using the [ResultHatchExt] extension trait
+impl<T, E> ResultHatchExt<T, E> for Result<T, E> {
     fn hatch(self) -> HatchResult<T, E> {
         HatchResult(self)
     }
@@ -57,7 +59,7 @@ impl<T, E> EscapeHatch<T, E> for Result<T, E> {
 
 #[cfg(test)]
 mod tests {
-    use crate::EscapeHatch;
+    use crate::ResultHatchExt;
 
     use super::HatchResult;
 
