@@ -45,7 +45,7 @@ impl<T, E> HatchResult<T, E> {
     }
 }
 
-trait EscapeHatch<T,E> {
+pub trait EscapeHatch<T,E> {
     fn hatch(self) -> HatchResult<T,E>;
 }
 
