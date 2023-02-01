@@ -2,8 +2,9 @@
 
 use std::ops::{FromResidual, Try};
 
-#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 /// The main HatchResult type. See crate level documentation for more information.
+/// derives the same traits as std::result::Result
+#[derive(Clone, Copy, PartialEq, PartialOrd, Eq, Ord, Debug, Hash)]
 pub struct HatchResult<T, E>(pub Result<T, E>);
 
 impl<T, E> FromResidual<HatchResult<T, E>> for HatchResult<T, E> {
@@ -16,7 +17,7 @@ impl<T, E> FromResidual<HatchResult<T, E>> for Result<T, E> {
     fn from_residual(residual: HatchResult<T, E>) -> Self {
         match residual {
             HatchResult(Ok(r)) => Ok(r),
-            _ => unreachable!("E cannot be instantiated"),
+            _ => unreachable!("Will never reach this, since residual will always be Ok"),
         }
     }
 }
@@ -50,6 +51,7 @@ impl<T, E> HatchResult<T, E> {
 pub trait ResultHatchExt<T, E> {
     fn hatch(self) -> HatchResult<T, E>;
 }
+
 /// The implementation which adds the `hatch` method to the builtin [Result] type using the [ResultHatchExt] extension trait
 impl<T, E> ResultHatchExt<T, E> for Result<T, E> {
     fn hatch(self) -> HatchResult<T, E> {

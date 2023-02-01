@@ -1,7 +1,6 @@
 # Hatch Result
 
 A wrapper over `std::result::Result` that returns on `Ok` instead of `Err` when the `?` operator is used.  
-This will exit the function with an `Ok` result if the computation has succeeded, or allows the developer to handle the error inside the function if it has failed.
 
 The builtin `Result`'s implementation of the `?` operator mimics the [short circuiting](https://en.wikipedia.org/wiki/Short-circuit_evaluation) on a logical **and**: if one operation returns an error, immediately return from the function. If not, proceed to the next statements.  
 
@@ -36,6 +35,18 @@ fn handle_errors(err1: String, err2: String) -> Result<u32, String> {
 }
 ```
 
+### Improves on matching
+HatchResult is more concise (but equivalent) to the traditional approach:
+```rust
+fn exit_early_if_possible() -> Result<u32, String> {
+    let err = match operation1() {
+        Err(error) => error,
+        ok_result => return ok_result
+    };
+    // ... 
+}
+
+```
 ### Difference between regular `Result` and `HatchResult`
 ```rust
 fn regular_result() -> Result<u32, String> {
@@ -46,23 +57,6 @@ fn regular_result() -> Result<u32, String> {
 fn hatch_result() -> Result<u32, String> {
     let err: String = HatchResult::<u32, String>(Ok(3))?;
     Err(err)
-}
-```
-
-### Exiting early after success of a fallible function.
-
-If the function succeeds, an `Ok` value is returned using the `?` operator.
-If it fails, the expression evaluates to the error value.
-
-```rust
-fn operation_that_might_fail() -> HatchResult<u32, String> {
-    let result = // ... some computation
-    HatchResult(result)
-}
-
-fn hatch_result() -> Result<u32, String> {
-    let error = operation_that_might_fail()?;
-    panic!("There was an error: {error}");
 }
 ```
 
@@ -82,3 +76,4 @@ fn hatch_result() -> Result<u32, String> {
     panic!("There was an error: {error}");
 }
 ```
+
